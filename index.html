@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Learning Hub | OSN, SNBT, Kedinasan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #3b82f6;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.5s ease;
+        }
+        
+        .floating-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            z-index: 50;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .drawer {
+            transition: transform 0.3s ease;
+            transform: translateX(100%);
+        }
+        
+        .drawer.open {
+            transform: translateX(0);
+        }
+        
+        .topic-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .animate-pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Custom checkbox */
+        .custom-checkbox {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            vertical-align: middle;
+        }
+        
+        .custom-checkbox:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .custom-checkbox:checked::after {
+            content: '\f00c';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="gradient-bg text-white sticky top-0 z-40 shadow-md">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-graduation-cap text-2xl"></i>
+                <h1 class="text-xl font-bold">My Learning Hub</h1>
+            </div>
+            <button id="menu-btn" class="text-white focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="drawer fixed inset-y-0 right-0 w-64 bg-white shadow-xl z-50 p-4">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-lg font-bold text-gray-800">Menu</h2>
+            <button id="close-menu" class="text-gray-600 focus:outline-none">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav>
+            <ul class="space-y-4">
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg bg-blue-50 text-blue-600">
+                        <i class="fas fa-home"></i>
+                        <span>Beranda</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-trophy"></i>
+                        <span>OSN Informatika</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-university"></i>
+                        <span>SNBT</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-landmark"></i>
+                        <span>Kedinasan</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-bookmark"></i>
+                        <span>Bookmarks</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="flex items-center space-x-3 p-2 rounded-lg hover:bg-gray-100 text-gray-700">
+                        <i class="fas fa-cog"></i>
+                        <span>Pengaturan</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="absolute bottom-4 left-4 right-4">
+            <button class="w-full py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                <i class="fas fa-sign-out-alt mr-2"></i>Logout
+            </button>
+        </div>
+    </div>
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- Welcome Section -->
+        <section class="mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-800">Selamat Datang, <span id="username">Pengguna</span>!</h2>
+                        <p class="text-gray-600">Mari belajar dan raih impianmu</p>
+                    </div>
+                    <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white">
+                        <i class="fas fa-user-graduate text-2xl"></i>
+                    </div>
+                </div>
+                <div class="bg-blue-50 rounded-lg p-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-800" id="daily-message">Memuat pesan harian...</p>
+                            <p class="text-xs text-gray-600" id="daily-submessage"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Section -->
+        <section class="mb-8">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">Progress Belajar</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-white rounded-xl shadow-sm p-4 card-hover">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-medium text-gray-700">OSN Informatika</h3>
+                        <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded" id="osn-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" id="osn-progress-bar"></div>
+                    </div>
+                    <p class="text-xs text-gray-500" id="osn-progress-text">0/0 materi selesai</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 card-hover">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-medium text-gray-700">SNBT</h3>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded" id="snbt-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" id="snbt-progress-bar"></div>
+                    </div>
+                    <p class="text-xs text-gray-500" id="snbt-progress-text">0/0 materi selesai</p>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 card-hover">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-medium text-gray-700">Kedinasan</h3>
+                        <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded" id="kedinasan-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar mb-2">
+                        <div class="progress-fill" id="kedinasan-progress-bar"></div>
+                    </div>
+                    <p class="text-xs text-gray-500" id="kedinasan-progress-text">0/0 materi selesai</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Access -->
+        <section class="mb-8">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">Akses Cepat</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <a href="#" class="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center justify-center card-hover" id="quick-osn">
+                    <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white mb-2">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <span class="text-sm font-medium text-center">OSN</span>
+                </a>
+                <a href="#" class="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center justify-center card-hover" id="quick-snbt">
+                    <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white mb-2">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <span class="text-sm font-medium text-center">SNBT</span>
+                </a>
+                <a href="#" class="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center justify-center card-hover" id="quick-kedinasan">
+                    <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white mb-2">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <span class="text-sm font-medium text-center">Kedinasan</span>
+                </a>
+                <a href="#" class="bg-white rounded-xl shadow-sm p-4 flex flex-col items-center justify-center card-hover" id="quick-materials">
+                    <div class="w-12 h-12 rounded-full gradient-bg flex items-center justify-center text-white mb-2">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <span class="text-sm font-medium text-center">Materi</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Recent Materials -->
+        <section class="mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800">Materi Terbaru</h2>
+                <a href="#" class="text-sm text-blue-600 font-medium" id="view-all-materials">Lihat Semua</a>
+            </div>
+            
+            <div class="space-y-4" id="materials-container">
+                <!-- Materials will be loaded here dynamically -->
+                <div class="text-center py-8">
+                    <i class="fas fa-spinner fa-spin text-2xl text-gray-400 mb-2"></i>
+                    <p class="text-gray-500">Memuat materi...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Motivational Quote -->
+        <section class="mb-8">
+            <div class="gradient-bg text-white rounded-xl p-6 shadow-lg">
+                <div class="flex items-center space-x-3 mb-3">
+                    <i class="fas fa-quote-left text-xl opacity-70"></i>
+                    <h3 class="text-lg font-bold">Kutipan Motivasi</h3>
+                </div>
+                <p class="mb-4 italic" id="motivational-quote">"Sukses bukanlah akhir, kegagalan bukanlah hal yang fatal. Yang penting adalah keberanian untuk terus melangkah."</p>
+                <p class="text-sm opacity-80" id="quote-author">- Winston Churchill</p>
+            </div>
+        </section>
+
+        <!-- Study Timer -->
+        <section class="mb-8">
+            <h2 class="text-lg font-bold mb-4 text-gray-800">Timer Belajar</h2>
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex flex-col items-center">
+                    <div class="w-40 h-40 rounded-full border-4 border-blue-200 flex items-center justify-center mb-6">
+                        <span id="timer-display" class="text-3xl font-bold">25:00</span>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button id="start-timer" class="px-6 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
+                            <i class="fas fa-play mr-2"></i>Mulai
+                        </button>
+                        <button id="reset-timer" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition">
+                            <i class="fas fa-redo mr-2"></i>Reset
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <h4 class="text-sm font-medium text-gray-700 mb-2">Mode Timer:</h4>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button data-minutes="25" class="timer-mode py-2 px-3 bg-blue-100 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-200">
+                            Pomodoro (25m)
+                        </button>
+                        <button data-minutes="45" class="timer-mode py-2 px-3 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200">
+                            Fokus (45m)
+                        </button>
+                        <button data-minutes="10" class="timer-mode py-2 px-3 bg-green-50 text-green-600 rounded-lg text-sm font-medium hover:bg-green-100">
+                            Istirahat (10m)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Action Button -->
+    <button id="add-material-btn" class="floating-btn gradient-bg text-white animate-pulse">
+        <i class="fas fa-plus text-xl"></i>
+    </button>
+
+    <!-- Add Material Modal -->
+    <div id="add-material-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-md mx-4 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">Tambah Materi Baru</h3>
+                <button id="close-modal" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="material-form">
+                <div class="mb-4">
+                    <label for="material-title" class="block text-sm font-medium text-gray-700 mb-1">Judul Materi*</label>
+                    <input type="text" id="material-title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="material-category" class="block text-sm font-medium text-gray-700 mb-1">Kategori*</label>
+                    <select id="material-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="osn">OSN Informatika</option>
+                        <option value="snbt">SNBT</option>
+                        <option value="kedinasan">Kedinasan</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="material-type" class="block text-sm font-medium text-gray-700 mb-1">Jenis Materi*</label>
+                    <select id="material-type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" required>
+                        <option value="">Pilih Jenis</option>
+                        <option value="document">Dokumen</option>
+                        <option value="video">Video</option>
+                        <option value="link">Link</option>
+                        <option value="note">Catatan</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="material-url" class="block text-sm font-medium text-gray-700 mb-1">URL/Link</label>
+                    <input type="url" id="material-url" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="https://example.com">
+                </div>
+                <div class="mb-4">
+                    <label for="material-tags" class="block text-sm font-medium text-gray-700 mb-1">Tag (pisahkan dengan koma)</label>
+                    <input type="text" id="material-tags" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Contoh: algoritma, matematika, struktur data">
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="cancel-add" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100">Batal</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Material Detail Modal -->
+    <div id="material-detail-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-gray-800" id="detail-title">Detail Materi</h3>
+                    <button id="close-detail-modal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex flex-wrap gap-2 mb-3" id="detail-tags"></div>
+                    <p class="text-gray-600" id="detail-description">Deskripsi materi akan muncul di sini.</p>
+                </div>
+                
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-700">Status:</span>
+                        <span class="text-sm" id="detail-status">Belum selesai</span>
+                    </div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm font-medium text-gray-700">Ditambahkan:</span>
+                        <span class="text-sm text-gray-500" id="detail-date">-</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm font-medium text-gray-700">URL:</span>
+                        <a href="#" target="_blank" class="text-sm text-blue-600 hover:underline" id="detail-url">-</a>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="checkbox" class="custom-checkbox" id="detail-completed">
+                        <span class="text-sm font-medium text-gray-700">Tandai selesai</span>
+                    </label>
+                    
+                    <div class="flex space-x-2">
+                        <button id="edit-material" class="px-3 py-1 text-sm bg-yellow-100 text-yellow-800 rounded hover:bg-yellow-200">
+                            <i class="fas fa-edit mr-1"></i>Edit
+                        </button>
+                        <button id="delete-material" class="px-3 py-1 text-sm bg-red-100 text-red-800 rounded hover:bg-red-200">
+                            <i class="fas fa-trash mr-1"></i>Hapus
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 py-4">
+        <div class="container mx-auto px-4 text-center text-sm text-gray-600">
+            <p>© 2023 My Learning Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Data storage
+        let materials = [];
+        let currentUser = {
+            name: "Pengguna",
+            progress: {
+                osn: { completed: 0, total: 0 },
+                snbt: { completed: 0, total: 0 },
+                kedinasan: { completed: 0, total: 0 }
+            }
+        };
+        
+        // DOM Elements
+        const menuBtn = document.getElementById('menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const overlay = document.getElementById('overlay');
+        
+        const addMaterialBtn = document.getElementById('add-material-btn');
+        const addMaterialModal = document.getElementById('add-material-modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const cancelAddBtn = document.getElementById('cancel-add');
+        const materialForm = document.getElementById('material-form');
+        
+        const materialDetailModal = document.getElementById('material-detail-modal');
+        const closeDetailModalBtn = document.getElementById('close-detail-modal');
+        
+        const materialsContainer = document.getElementById('materials-container');
+        const viewAllMaterialsBtn = document.getElementById('view-all-materials');
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load data from localStorage
+            loadData();
+            
+            // Update UI
+            updateUserInfo();
+            updateProgressBars();
+            loadMaterials();
+            setDailyMessage();
+            setMotivationalQuote();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+        
+        // Load data from localStorage
+        function loadData() {
+            const savedUser = localStorage.getItem('learningHubUser');
+            const savedMaterials = localStorage.getItem('learningHubMaterials');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+            }
+            
+            if (savedMaterials) {
+                materials = JSON.parse(savedMaterials);
+                updateMaterialCounts();
+            }
+        }
+        
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('learningHubUser', JSON.stringify(currentUser));
+            localStorage.setItem('learningHubMaterials', JSON.stringify(materials));
+        }
+        
+        // Update material counts for progress tracking
+        function updateMaterialCounts() {
+            currentUser.progress = {
+                osn: { completed: 0, total: 0 },
+                snbt: { completed: 0, total: 0 },
+                kedinasan: { completed: 0, total: 0 }
+            };
+            
+            materials.forEach(material => {
+                if (material.category === 'osn') {
+                    currentUser.progress.osn.total++;
+                    if (material.completed) currentUser.progress.osn.completed++;
+                } else if (material.category === 'snbt') {
+                    currentUser.progress.snbt.total++;
+                    if (material.completed) currentUser.progress.snbt.completed++;
+                } else if (material.category === 'kedinasan') {
+                    currentUser.progress.kedinasan.total++;
+                    if (material.completed) currentUser.progress.kedinasan.completed++;
+                }
+            });
+            
+            saveData();
+        }
+        
+        // Update user info in UI
+        function updateUserInfo() {
+            document.getElementById('username').textContent = currentUser.name;
+        }
+        
+        // Update progress bars
+        function updateProgressBars() {
+            // OSN Progress
+            const osnCompleted = currentUser.progress.osn.completed;
+            const osnTotal = currentUser.progress.osn.total;
+            const osnPercent = osnTotal > 0 ? Math.round((osnCompleted / osnTotal) * 100) : 0;
+            
+            document.getElementById('osn-progress-percent').textContent = `${osnPercent}%`;
+            document.getElementById('osn-progress-bar').style.width = `${osnPercent}%`;
+            document.getElementById('osn-progress-text').textContent = `${osnCompleted}/${osnTotal} materi selesai`;
+            
+            // SNBT Progress
+            const snbtCompleted = currentUser.progress.snbt.completed;
+            const snbtTotal = currentUser.progress.snbt.total;
+            const snbtPercent = snbtTotal > 0 ? Math.round((snbtCompleted / snbtTotal) * 100) : 0;
+            
+            document.getElementById('snbt-progress-percent').textContent = `${snbtPercent}%`;
+            document.getElementById('snbt-progress-bar').style.width = `${snbtPercent}%`;
+            document.getElementById('snbt-progress-text').textContent = `${snbtCompleted}/${snbtTotal} materi selesai`;
+            
+            // Kedinasan Progress
+            const kedinasanCompleted = currentUser.progress.kedinasan.completed;
+            const kedinasanTotal = currentUser.progress.kedinasan.total;
+            const kedinasanPercent = kedinasanTotal > 0 ? Math.round((kedinasanCompleted / kedinasanTotal) * 100) : 0;
+            
+            document.getElementById('kedinasan-progress-percent').textContent = `${kedinasanPercent}%`;
+            document.getElementById('kedinasan-progress-bar').style.width = `${kedinasanPercent}%`;
+            document.getElementById('kedinasan-progress-text').textContent = `${kedinasanCompleted}/${kedinasanTotal} materi selesai`;
+        }
+        
+        // Load materials into UI
+        function loadMaterials() {
+            if (materials.length === 0) {
+                materialsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-book-open text-2xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-500">Belum ada materi</p>
+                        <button id="add-first-material" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            Tambah Materi Pertama
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('add-first-material')?.addEventListener('click', () => {
+                    addMaterialModal.classList.remove('hidden');
+                    overlay.classList.remove('hidden');
+                });
+                
+                return;
+            }
+            
+            // Sort by date (newest first)
+            const sortedMaterials = [...materials].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // Get top 3 materials
+            const recentMaterials = sortedMaterials.slice(0, 3);
+            
+            materialsContainer.innerHTML = '';
+            
+            recentMaterials.forEach(material => {
+                const materialCard = createMaterialCard(material);
+                materialsContainer.appendChild(materialCard);
+            });
+        }
+        
+        // Create material card element
+        function createMaterialCard(material) {
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl shadow-sm overflow-hidden card-hover';
+            card.dataset.id = material.id;
+            
+            // Format date
+            const date = new Date(material.date);
+            const formattedDate = date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            // Get category info
+            let categoryClass, categoryText, categoryIcon;
+            switch (material.category) {
+                case 'osn':
+                    categoryClass = 'bg-blue-100 text-blue-800';
+                    categoryText = 'OSN';
+                    categoryIcon = 'fa-trophy';
+                    break;
+                case 'snbt':
+                    categoryClass = 'bg-purple-100 text-purple-800';
+                    categoryText = 'SNBT';
+                    categoryIcon = 'fa-university';
+                    break;
+                case 'kedinasan':
+                    categoryClass = 'bg-red-100 text-red-800';
+                    categoryText = 'Kedinasan';
+                    categoryIcon = 'fa-landmark';
+                    break;
+            }
+            
+            // Get type icon
+            let typeIcon, typeIconClass;
+            switch (material.type) {
+                case 'document':
+                    typeIcon = 'fa-file-alt';
+                    typeIconClass = 'bg-blue-50 text-blue-600';
+                    break;
+                case 'video':
+                    typeIcon = 'fa-file-video';
+                    typeIconClass = 'bg-red-50 text-red-600';
+                    break;
+                case 'link':
+                    typeIcon = 'fa-link';
+                    typeIconClass = 'bg-green-50 text-green-600';
+                    break;
+                case 'note':
+                    typeIcon = 'fa-sticky-note';
+                    typeIconClass = 'bg-yellow-50 text-yellow-600';
+                    break;
+            }
+            
+            // Create tags HTML
+            let tagsHTML = '';
+            if (material.tags && material.tags.length > 0) {
+                material.tags.forEach(tag => {
+                    tagsHTML += `<span class="topic-badge bg-gray-100 text-gray-800">${tag}</span>`;
+                });
+            }
+            
+            card.innerHTML = `
+                <div class="p-4">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="font-bold text-gray-800 mb-1">${material.title}</h3>
+                            <div class="flex flex-wrap gap-2 mb-2">
+                                <span class="topic-badge ${categoryClass}">
+                                    <i class="fas ${categoryIcon} mr-1"></i>${categoryText}
+                                </span>
+                                ${tagsHTML}
+                            </div>
+                            <p class="text-sm text-gray-600 mb-3">${material.description || 'Tidak ada deskripsi'}</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-full ${typeIconClass} flex items-center justify-center">
+                            <i class="fas ${typeIcon}"></i>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span><i class="fas fa-clock mr-1"></i> ${formattedDate}</span>
+                        <div class="flex items-center space-x-2">
+                            <span>
+                                <i class="fas fa-check-circle ${material.completed ? 'text-green-500' : 'text-gray-300'} mr-1"></i> 
+                                ${material.completed ? 'Selesai' : 'Belum selesai'}
+                            </span>
+                            <button class="text-blue-600 material-detail-btn">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return card;
+        }
+        
+        // Set daily motivational message
+        function setDailyMessage() {
+            const messages = [
+                { text: "Hari ini ada 2 materi baru!", subtext: "Algoritma Greedy dan TPS SNBT" },
+                { text: "Jangan lupa belajar hari ini!", subtext: "Konsistensi adalah kunci kesuksesan" },
+                { text: "Progress belajar Anda meningkat!", subtext: "Terus pertahankan semangat belajar" },
+                { text: "Waktunya mengerjakan latihan soal!", subtext: "Latihan membuat Anda semakin mahir" },
+                { text: "Anda memiliki 1 materi yang belum selesai", subtext: "Yuk selesaikan hari ini!" }
+            ];
+            
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            
+            document.getElementById('daily-message').textContent = randomMessage.text;
+            document.getElementById('daily-submessage').textContent = randomMessage.subtext;
+        }
+        
+        // Set motivational quote
+        function setMotivationalQuote() {
+            const quotes = [
+                { text: "Sukses bukanlah akhir, kegagalan bukanlah hal yang fatal. Yang penting adalah keberanian untuk terus melangkah.", author: "Winston Churchill" },
+                { text: "Pendidikan adalah senjata paling mematikan di dunia, karena dengan pendidikan Anda dapat mengubah dunia.", author: "Nelson Mandela" },
+                { text: "Jika Anda ingin mencapai sesuatu yang belum pernah Anda capai, Anda harus bersedia melakukan sesuatu yang belum pernah Anda lakukan.", author: "Unknown" },
+                { text: "Jangan pernah menyerah pada apa yang benar-benar ingin Anda lakukan. Orang dengan impian besar lebih kuat daripada orang dengan semua fakta.", author: "Albert Einstein" },
+                { text: "Kesuksesan adalah jumlah dari usaha kecil yang diulang hari demi hari.", author: "Robert Collier" }
+            ];
+            
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            document.getElementById('motivational-quote').textContent = randomQuote.text;
+            document.getElementById('quote-author').textContent = `- ${randomQuote.author}`;
+        }
+        
+        // Set up event listeners
+        function setupEventListeners() {
+            // Mobile menu
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('open');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            });
+            
+            closeMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+            
+            overlay.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Add material modal
+            addMaterialBtn.addEventListener('click', () => {
+                addMaterialModal.classList.remove('hidden');
+                overlay.classList.remove('hidden');
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                addMaterialModal.classList.add('hidden');
+                overlay.classList.add('hidden');
+            });
+            
+            cancelAddBtn.addEventListener('click', () => {
+                addMaterialModal.classList.add('hidden');
+                overlay.classList.add('hidden');
+            });
+            
+            // Material form submission
+            materialForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const title = document.getElementById('material-title').value;
+                const category = document.getElementById('material-category').value;
+                const type = document.getElementById('material-type').value;
+                const url = document.getElementById('material-url').value;
+                const tagsInput = document.getElementById('material-tags').value;
+                
+                // Process tags
+                const tags = tagsInput 
+                    ? tagsInput.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
+                    : [];
+                
+                // Create new material
+                const newMaterial = {
+                    id: Date.now().toString(),
+                    title,
+                    category,
+                    type,
+                    url,
+                    tags,
+                    description: "Deskripsi materi ini belum ditambahkan.",
+                    completed: false,
+                    date: new Date().toISOString()
+                };
+                
+                // Add to materials array
+                materials.unshift(newMaterial);
+                
+                // Update counts and save
+                updateMaterialCounts();
+                updateProgressBars();
+                
+                // Reload materials
+                loadMaterials();
+                
+                // Reset form and close modal
+                materialForm.reset();
+                addMaterialModal.classList.add('hidden');
+                overlay.classList.add('hidden');
+                
+                // Show success message
+                alert('Materi berhasil ditambahkan!');
+            });
+            
+            // Quick access buttons
+            document.getElementById('quick-osn').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Anda akan diarahkan ke halaman OSN');
+                // In a real app, you would navigate to the OSN page
+            });
+            
+            document.getElementById('quick-snbt').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Anda akan diarahkan ke halaman SNBT');
+            });
+            
+            document.getElementById('quick-kedinasan').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Anda akan diarahkan ke halaman Kedinasan');
+            });
+            
+            document.getElementById('quick-materials').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Anda akan diarahkan ke halaman semua materi');
+            });
+            
+            // View all materials
+            viewAllMaterialsBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Anda akan diarahkan ke halaman semua materi');
+                // In a real app, you would navigate to the materials page
+            });
+            
+            // Material detail modal (delegated event)
+            materialsContainer.addEventListener('click', function(e) {
+                if (e.target.closest('.material-detail-btn') || e.target.classList.contains('material-detail-btn')) {
+                    const materialCard = e.target.closest('[data-id]');
+                    if (materialCard) {
+                        const materialId = materialCard.dataset.id;
+                        const material = materials.find(m => m.id === materialId);
+                        
+                        if (material) {
+                            showMaterialDetail(material);
+                        }
+                    }
+                }
+            });
+            
+            // Close detail modal
+            closeDetailModalBtn.addEventListener('click', () => {
+                materialDetailModal.classList.add('hidden');
+                overlay.classList.add('hidden');
+            });
+        }
+        
+        // Show material detail
+        function showMaterialDetail(material) {
+            // Format date
+            const date = new Date(material.date);
+            const formattedDate = date.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Set title
+            document.getElementById('detail-title').textContent = material.title;
+            
+            // Set description
+            document.getElementById('detail-description').textContent = material.description || 'Tidak ada deskripsi';
+            
+            // Set status
+            document.getElementById('detail-status').textContent = material.completed ? 'Selesai' : 'Belum selesai';
+            document.getElementById('detail-status').className = material.completed ? 'text-sm text-green-600' : 'text-sm text-gray-600';
+            
+            // Set date
+            document.getElementById('detail-date').textContent = formattedDate;
+            
+            // Set URL
+            const urlElement = document.getElementById('detail-url');
+            if (material.url) {
+                urlElement.textContent = material.url.length > 30 ? material.url.substring(0, 30) + '...' : material.url;
+                urlElement.href = material.url;
+            } else {
+                urlElement.textContent = '-';
+                urlElement.removeAttribute('href');
+            }
+            
+            // Set tags
+            const tagsContainer = document.getElementById('detail-tags');
+            tagsContainer.innerHTML = '';
+            
+            if (material.tags && material.tags.length > 0) {
+                material.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'topic-badge bg-gray-100 text-gray-800';
+                    tagElement.textContent = tag;
+                    tagsContainer.appendChild(tagElement);
+                });
+            }
+            
+            // Set completed checkbox
+            const completedCheckbox = document.getElementById('detail-completed');
+            completedCheckbox.checked = material.completed;
+            
+            // Set up checkbox event
+            completedCheckbox.onchange = function() {
+                material.completed = this.checked;
+                saveData();
+                updateMaterialCounts();
+                updateProgressBars();
+                loadMaterials();
+                
+                document.getElementById('detail-status').textContent = material.completed ? 'Selesai' : 'Belum selesai';
+                document.getElementById('detail-status').className = material.completed ? 'text-sm text-green-600' : 'text-sm text-gray-600';
+            };
+            
+            // Set up edit button
+            document.getElementById('edit-material').onclick = function() {
+                alert('Fitur edit akan segera tersedia!');
+                // In a real app, you would implement the edit functionality
+            };
+            
+            // Set up delete button
+            document.getElementById('delete-material').onclick = function() {
+                if (confirm('Apakah Anda yakin ingin menghapus materi ini?')) {
+                    const index = materials.findIndex(m => m.id === material.id);
+                    if (index !== -1) {
+                        materials.splice(index, 1);
+                        saveData();
+                        updateMaterialCounts();
+                        updateProgressBars();
+                        loadMaterials();
+                        materialDetailModal.classList.add('hidden');
+                        overlay.classList.add('hidden');
+                    }
+                }
+            };
+            
+            // Show modal
+            materialDetailModal.classList.remove('hidden');
+            overlay.classList.remove('hidden');
+        }
+        
+        // Study Timer
+        let timerInterval;
+        let totalSeconds = 25 * 60; // 25 minutes default
+        
+        const timerDisplay = document.getElementById('timer-display');
+        const startTimerBtn = document.getElementById('start-timer');
+        const resetTimerBtn = document.getElementById('reset-timer');
+        const timerModes = document.querySelectorAll('.timer-mode');
+        
+        function updateTimerDisplay() {
+            const minutes = Math.floor(totalSeconds / 60);
+            const seconds = totalSeconds % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+        
+        function startTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            startTimerBtn.innerHTML = '<i class="fas fa-pause mr-2"></i>Pause';
+            startTimerBtn.removeEventListener('click', startTimer);
+            startTimerBtn.addEventListener('click', pauseTimer);
+            
+            timerInterval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    // Play notification sound
+                    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+                    audio.play();
+                    
+                    // Show notification
+                    if (Notification.permission === 'granted') {
+                        new Notification('Waktu Belajar Habis', {
+                            body: 'Waktu belajar Anda telah habis! Istirahat sebentar yuk!',
+                            icon: 'https://cdn-icons-png.flaticon.com/512/2232/2232688.png'
+                        });
+                    } else {
+                        alert('Waktu belajar telah habis! Istirahat sebentar yuk!');
+                    }
+                    
+                    return;
+                }
+                
+                totalSeconds--;
+                updateTimerDisplay();
+            }, 1000);
+        }
+        
+        function pauseTimer() {
+            clearInterval(timerInterval);
+            startTimerBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Lanjut';
+            startTimerBtn.removeEventListener('click', pauseTimer);
+            startTimerBtn.addEventListener('click', startTimer);
+        }
+        
+        function resetTimer() {
+            clearInterval(timerInterval);
+            totalSeconds = 25 * 60;
+            updateTimerDisplay();
+            startTimerBtn.innerHTML = '<i class="fas fa-play mr-2"></i>Mulai';
+            startTimerBtn.removeEventListener('click', pauseTimer);
+            startTimerBtn.addEventListener('click', startTimer);
+        }
+        
+        startTimerBtn.addEventListener('click', startTimer);
+        resetTimerBtn.addEventListener('click', resetTimer);
+        
+        timerModes.forEach(mode => {
+            mode.addEventListener('click', () => {
+                const minutes = parseInt(mode.dataset.minutes);
+                totalSeconds = minutes * 60;
+                updateTimerDisplay();
+                
+                // Update active state
+                timerModes.forEach(m => {
+                    m.classList.remove('bg-blue-100', 'text-blue-600');
+                    m.classList.add('bg-gray-100', 'text-gray-700');
+                });
+                
+                mode.classList.remove('bg-gray-100', 'text-gray-700');
+                mode.classList.add('bg-blue-100', 'text-blue-600');
+            });
+        });
+        
+        // Initialize timer display
+        updateTimerDisplay();
+        
+        // Request notification permission
+        if ('Notification' in window) {
+            Notification.requestPermission();
+        }
+    </script>
+</body>
+</html>
